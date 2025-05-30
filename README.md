@@ -1,4 +1,5 @@
 process jsons and get csvs (output_folder: processed_data)
+
 required: yelp dataset in dir: yelp_data/
 
 ```python preprocess_business.py```
@@ -8,7 +9,10 @@ get embeddings (categories, business-categories; output_folder: storage), busine
 ```python business_similarities.py```
 
 get HeteroData graph (output_folder: processed_data)
+
 required: storage/embeddings_2022_full.hdf5
+
+required: train.json
 
 ```python build_graph.py```
 

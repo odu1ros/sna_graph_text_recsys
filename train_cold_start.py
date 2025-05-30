@@ -227,12 +227,7 @@ def main(args):
             neg_sampling_ratio=args.neg_sampling_ratio,
             num_workers=args.num_workers,
             pin_memory=True if DEVICE == 'cuda' else False,
-        )
-
-    # data = data.to(DEVICE)
-    # train_edge = train_edge.to(DEVICE)
-    # val_edge = val_edge.to(DEVICE)
-    
+        )    
 
     encoder = GNNEncoder(args.hidden_dim, args.out_dim).to(DEVICE)
     decoder = EdgeDecoder(args.out_dim).to(DEVICE)

@@ -98,7 +98,7 @@ def stream_edges(reviews_path, user_map, biz_map):
                 else:
                     skipped += 1
             except json.JSONDecodeError as e:
-                print(f'Ошибка декодирования JSON в строке {i+1}: {e}')
+                print(f'Ошибка декодирования JSON в строке: {e}')
                 print(f'Проблемная строка: {line.strip()[:100]}...')
                 skipped += 1
                 continue
@@ -133,24 +133,6 @@ def evaluate(encoder, decoder, loader, device=DEVICE):
     auc = roc_auc_score(final_labels, final_logits)
     ap = average_precision_score(final_labels, final_logits)
     return auc, ap
-
-    # model.eval()
-    # decoder.eval()
-    # z_dict = model(data.x_dict, data.edge_index_dict)
-    # pos_src, pos_dst = edge_index
-    # pos_logits = decoder(z_dict['user'], z_dict['business'], edge_index)
-    # pos_labels = torch.ones_like(pos_logits)
-
-    # neg_dst = torch.randint(0, z_dict['business'].size(0), (pos_src.size(0),), device=pos_src.device)
-    # neg_logits = decoder(z_dict['user'], z_dict['business'], (pos_src, neg_dst))
-    # neg_labels = torch.zeros_like(neg_logits)
-
-    # logits = torch.cat([pos_logits, neg_logits]).sigmoid().cpu().numpy()
-    # labels = torch.cat([pos_labels, neg_labels]).cpu().numpy()
-
-    # auc = roc_auc_score(labels, logits)
-    # ap = average_precision_score(labels, logits)
-    # return auc, ap
 
 
 def train(encoder, decoder, loader, optimizer, criterion, device='cuda'):
@@ -190,38 +172,16 @@ def train(encoder, decoder, loader, optimizer, criterion, device='cuda'):
     
     return total_loss / len(loader)
 
-    # with torch.set_grad_enabled(not is_eval):
-    #     z_dict = model(data.x_dict, data.edge_index_dict)
-
-    #     pos_src, pos_dst = edge_index
-    #     pos_logits = decoder(z_dict['user'], z_dict['business'], edge_index)
-    #     pos_labels = torch.ones_like(pos_logits)
-
-    #     neg_dst = torch.randint(0, z_dict['business'].size(0), (pos_src.size(0),), device=pos_src.device)
-    #     neg_logits = decoder(z_dict['user'], z_dict['business'], (pos_src, neg_dst))
-    #     neg_labels = torch.zeros_like(neg_logits)
-
-    #     logits = torch.cat([pos_logits, neg_logits])
-    #     labels = torch.cat([pos_labels, neg_labels])
-
-    #     loss = criterion(logits, labels)
-
-    #     if not is_eval:
-    #         loss.backward()
-    #         optimizer.step()
-
-    #     return loss.item()
-
 
 def main(args):
     print(f'Загрузка графа из {args.graph_path}...')
     data = torch.load(args.graph_path, weights_only=False)
 
     print("\n=== ПРОВЕРКА ТИПОВ И ФОРМ ПРИЗНАКОВ УЗЛОВ ПОСЛЕ ЗАГРУЗКИ ===")
-    all_node_types_in_data = data.node_types # Получаем список всех типов узлов
+    all_node_types_in_data = data.node_types
     print(f'  Обнаруженные типы узлов в графе: {all_node_types_in_data}')
 
-    for node_type in all_node_types_in_data: # Итерируемся по всем типам
+    for node_type in all_node_types_in_data:
         store = data[node_type]
         print(f"  Узел: '{node_type}'")
         if hasattr(store, 'x') and store.x is not None:

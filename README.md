@@ -9,11 +9,15 @@ process jsons and get csvs (output_folder: processed_data)
 
 required: yelp dataset in dir: yelp_data/
 
-```python preprocess_business.py```
+```
+python preprocess_business.py
+```
 
 get embeddings (categories, business-categories; output_folder: storage), business similarities (output_folder: processed_data)
 
-```python business_similarities.py```
+```
+python business_similarities.py
+```
 
 Prepare embeddings (2021 - train, 2022 - validation and test):
 
@@ -31,7 +35,9 @@ required: storage/embeddings_2022_full.hdf5
 
 required: train.json
 
-```python build_graph.py```
+```
+python build_graph.py
+```
 
 run train test (cold start, se embeddings as of 2022)
 
